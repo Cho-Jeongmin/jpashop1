@@ -4,8 +4,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
+import jpabook.jpashop.domain.Item;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;
+import jpabook.jpashop.domain.OrderItem;
 
 public class JpaMain {
 
@@ -18,11 +20,9 @@ public class JpaMain {
     tx.begin();
 
     try {
-      Order order = em.find(Order.class, 1L);
+      Order order = new Order();
 
-      Long memberId = order.getMemberId(); // 이렇게 오더가 memberId를 갖고 있는 경우에는
-
-      em.find(Member.class, memberId); // 그 memberId를 가지고 member 한번 더 찾아내야함. (객체지향적이지 않음)
+      order.addOrderItem(new OrderItem());
 
       tx.commit();
     } catch (Exception e) {

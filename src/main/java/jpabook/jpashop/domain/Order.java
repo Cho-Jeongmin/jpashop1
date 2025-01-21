@@ -4,12 +4,19 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -21,15 +28,23 @@ public class Order {
   @Column(name = "ORDER_ID")
   private Long id;
 
-  @Column(name = "MEMBER_ID")
-  private Long memberId; // 사실 memberId가 아니라
+  @ManyToOne
+  @JoinColumn(name = "MEMBER_ID")
+  private Member member;
 
-  // private Member member; // 이렇게 member 자체를 가지고 있어야 객체지향적인 설계임
+  @OneToMany(mappedBy = "order")
+  private List<OrderItem> orderItems = new ArrayList<>();
 
   private LocalDateTime orderDate;
 
   @Enumerated(EnumType.STRING)
   private OrderStatus status;
+
+  // 양방향 연관관계 편의 메소드
+  public void addOrderItem(OrderItem orderItem) {
+    orderItems.add(orderItem);
+    orderItem.setOrder(this);
+  }
 
   public Long getId() {
     return id;
@@ -39,12 +54,12 @@ public class Order {
     this.id = id;
   }
 
-  public Long getMemberId() {
-    return memberId;
+  public Member getMember() {
+    return member;
   }
 
-  public void setMemberId(Long memberId) {
-    this.memberId = memberId;
+  public void setMember(Member member) {
+    this.member = member;
   }
 
   public LocalDateTime getOrderDate() {
@@ -62,4 +77,6 @@ public class Order {
   public void setStatus(OrderStatus status) {
     this.status = status;
   }
+
+
 }
