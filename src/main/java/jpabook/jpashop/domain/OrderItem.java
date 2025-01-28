@@ -9,7 +9,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class OrderItem {
+public class OrderItem extends BaseEntity {
 
   @Id
   @GeneratedValue
